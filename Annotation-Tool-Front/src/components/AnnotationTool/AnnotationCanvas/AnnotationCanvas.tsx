@@ -1,10 +1,10 @@
 import { FC, useRef, useEffect, useState } from 'react';
-import styles from './AnnotationCanvas.module.scss';
 import { generateRandomColor } from "~/utils/utils";
 import * as shapes from "../shapes";
 import { BBox } from "../shapes";
 import { CircularProgress } from '@mui/material';
 //import { setLoadingCanvasBg, setShapes } from '~/redux/slices/annotationSlice'
+import './AnnotationCanvas.css';
 
 interface AnnotationCanvasProps {
   image: any,
@@ -59,6 +59,7 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
       //dispatch(setLoadingCanvasBg(true))
       setSaving(false);
       //dispatch(setShapes(image.boxes.map((box: any, index: number) => boxToShape(index, box))));
+      console.log(image.url)
       background.src = image.url;
     }
   }, [image]);
@@ -292,18 +293,17 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
 
   //console.log(shapes[0].boxes[0]);
   return (
-    <div className={styles.AnnotationCanvas} data-testid="AnnotationCanvas" ref={Drawing}>
-      <div className="Drawing-Area" ref={drawingArea}>
-      {false && <CircularProgress  color="inherit" />}
-      <canvas
-        width={window.innerWidth}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseOut={handleMouseOut}
-        onMouseOver={handleMouseOver}
-        onClick={handleOnClick}
-        ref={canvas}></canvas>
+    <div className="AnnotationCanvas" data-testid="AnnotationCanvas" ref={Drawing}>
+      <div className="DrawingArea" ref={drawingArea}>
+        <canvas
+          width={window.innerWidth}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseOut={handleMouseOut}
+          onMouseOver={handleMouseOver}
+          onClick={handleOnClick}
+          ref={canvas}></canvas>
       </div>
     </div>)
 };

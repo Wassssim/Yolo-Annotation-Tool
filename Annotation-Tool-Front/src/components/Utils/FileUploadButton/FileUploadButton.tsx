@@ -1,10 +1,10 @@
-import { FC, ReactNode, useRef } from "react";
+import { FC, PropsWithChildren, useRef } from "react";
 
-type FileUploadButtonProps = {
+interface FileUploadButtonProps {
     onFileUpload: (files: File[]) => void,
 }
 
-const FileUploadButton: FC<FileUploadButtonProps> = ({ onFileUpload, children }) => {
+const FileUploadButton: FC<PropsWithChildren<FileUploadButtonProps>> = ({ onFileUpload, children }) => {
     const hiddenFileInputRef = useRef<HTMLInputElement>(null);
     
     const handleChange = (event: any) => {
@@ -21,6 +21,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ onFileUpload, children })
                 type="file"
                 style={{display: "none"}}
                 onChange={handleChange}
+                multiple={true}
                 ref={hiddenFileInputRef}
             ></input>
             <button onClick={handleClick}>{children}</button>

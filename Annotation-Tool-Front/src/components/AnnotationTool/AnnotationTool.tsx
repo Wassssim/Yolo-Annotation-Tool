@@ -30,7 +30,7 @@ const AnnotationTool = () => {
 	const [page , setPage] = useState(1);
 
 	/** Redux */
-	const selectedImageId = 0;
+	const [selectedImageId, setSelectedImageId] = useState("");
 	//const selectedImageId = useSelector((state: any) => state.annotationTool.selectedImageId);
 	//const shapes = useSelector((state: any) => state.annotationTool.shapes);
 	//const images = useSelector((state: any) => state.annotationTool.images);
@@ -38,13 +38,19 @@ const AnnotationTool = () => {
 	const [ images, setImages] = useState<any[]>([]);
 	//const dispatch = useDispatch();
 
-	const selectedImage = useMemo(() => images.find((image: any) => image.id === selectedImageId), [selectedImageId]);
+	const selectedImage = useMemo(() => {
+		console.log(images, selectedImageId)
+		return images.find((image: any) => image.id === selectedImageId);
+	}, [selectedImageId]);
 	const selectedImageIdx = useMemo(() => images.findIndex((image: any) => image.id === selectedImageId), [images, selectedImageId]);
 
 	const handleFileSelect = (files: File[]) => {
-		console.log(files)
-		setImages(Object.values(files).map((file: File) => { return { id: file.name, name: file.name, url: URL.createObjectURL(file) } }));
-		// TODO: REMOVE THE createObjectURL MEMORY LEAK
+		setImages(() => {
+			const newImages =  Object.values(files).map((file: File) => ({ id: file.name, name: file.name, url: URL.createObjectURL(file) }));
+			// TODO: REMOVE THE createObjectURL MEMORY LEAK
+			setSelectedImageId(newImages[0].id);
+			return newImages;
+		});
 	}
 
 	useEffect(() => {
