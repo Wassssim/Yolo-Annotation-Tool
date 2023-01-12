@@ -1,0 +1,35 @@
+.scrolling-wrapper {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: row;
+}
+
+.scrolling-wrapper .card {
+    flex-shrink: 0;
+    border: 0px rgb(82, 82, 82) solid;
+    width: 100px;
+    height: 100px;
+    margin-right: 13px;
+}
+
+.scrolling-wrapper .card-body {
+    height: 100%;
+}
+
+.scrolling-wrapper .card-img {
+    width: 70px;
+    height: 70px;
+}
+
+.card-body {
+    background-color: #e3e3e3e4;
+}
+
+.card-selected{
+    border: 2px solid #f7ffe51f;
+    background-color: #e3e3e3c7;
+    /*background-color: rgb(46, 49, 118);*/
+}

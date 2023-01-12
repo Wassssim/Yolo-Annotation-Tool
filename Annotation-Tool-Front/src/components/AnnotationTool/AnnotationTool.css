@@ -1,0 +1,62 @@
+.annotation-tool {
+    background-color: #f4f4f4;
+    width: 1fr;
+    border-radius: 50px;
+    padding: 20px;
+    margin: 30px;
+}
+
+.annotation-tool-wrapper {
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.top-control-bar {
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 5%;
+}
+
+.row-2 {
+    display: flex;
+}
+
+.side-control-bar-left {
+    height: 100%;
+}
+
+.side-control-bar-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 55px;
+}
+
+.side-control-bar-buttons > * {
+    margin-bottom: 10px;
+}
+
+.canvas-wrapper {
+    width: 80%;
+    border: 1px solid red;
+    margin-left: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.annotation-tool-canvas {
+    width: 1280px;
+    height: 720px;
+}
+
+.canvas-placeholder {
+    height:100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+
+}
