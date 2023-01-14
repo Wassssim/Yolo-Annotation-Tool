@@ -13,7 +13,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FileUploadButton from '../Utils/FileUploadButton/FileUploadButton';
 
-const background = new Image();
+let background: HTMLImageElement = new Image();
 
 const AnnotationTool = () => {
 	const segmentId = 5;
@@ -42,6 +42,7 @@ const AnnotationTool = () => {
 		console.log(images, selectedImageId)
 		return images.find((image: any) => image.id === selectedImageId);
 	}, [selectedImageId]);
+
 	const selectedImageIdx = useMemo(() => images.findIndex((image: any) => image.id === selectedImageId), [images, selectedImageId]);
 
 	const handleFileSelect = (files: File[]) => {
@@ -176,7 +177,7 @@ const AnnotationTool = () => {
 					</div>
 					<div className="canvas-wrapper">
 						<div className='annotation-tool-canvas'>
-							{ (images.length === 0) 
+							{ ((images.length === 0) || (selectedImageId === "")) 
 								? 
 									<div className="canvas-placeholder">
 										<img src={genericImageIcon} width={200}></img>
@@ -198,7 +199,7 @@ const AnnotationTool = () => {
 							<ShapeController
 								key={shape.id}
 								shape={shape}
-								background={background}
+								background={null}
 								labels={labels}
 								deleteShapeById={deleteShapeById}
 							/>)

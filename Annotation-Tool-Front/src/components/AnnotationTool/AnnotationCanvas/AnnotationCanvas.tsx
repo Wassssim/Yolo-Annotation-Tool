@@ -10,8 +10,8 @@ interface AnnotationCanvasProps {
   image: any,
   mode: string,
   activeLabelId: number,
-  background: any,
   setSaving: any,
+  background: HTMLImageElement
 }
 
 let ctx: any = null;
@@ -21,6 +21,7 @@ let startX: any = null;
 let startY: any = null;
 let newShapeID = -1;
 let newShapeInitialPoint: any = null;
+
 // #Orange #Blue #Whitey #Red #Green #Pink 
 let colorPalette: any = ["226, 162, 79", "29, 184, 248", "239, 218, 254", "194, 61, 46", "80, 166, 121", "197, 86, 225"];
 const pointerr = new shapes.Pointer(0, 0.3, 0.09);
@@ -28,6 +29,9 @@ const pointerr = new shapes.Pointer(0, 0.3, 0.09);
 const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, activeLabelId, background }) => {
   const [width, setWidth] = useState(1280);
   const [height, setHeight] = useState(720);
+  const [ loadingImage, setLoadingImage ] = useState(true);
+	const [ shapes, setShapes ] = useState<any[]>([]);
+
   const [resizing, setResizing] = useState(false);
   const [resizeParams, setResizeParams] = useState<any>(null);
   const [creating, setCreating] = useState(false);
@@ -39,7 +43,6 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
 	//const shapes = useSelector((state: any) => state.annotationTool.shapes);
 
   const loadingCanvasBg: any[] = [];
-	const shapes: any[] = [];
 
   const canvas = useRef<any>();
   const drawingArea = useRef<any>();
@@ -47,6 +50,7 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
 
   background.onload = () => {
     console.log("Loaded IMAGE");
+    setLoadingImage(false);
     //dispatch(setLoadingCanvasBg(false));
   }
 
@@ -58,6 +62,7 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
     if (image) {
       //dispatch(setLoadingCanvasBg(true))
       setSaving(false);
+      setLoadingImage(true);
       //dispatch(setShapes(image.boxes.map((box: any, index: number) => boxToShape(index, box))));
       console.log(image.url)
       background.src = image.url;
@@ -101,11 +106,11 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
   }, []);
 
   useEffect(() => {
-    if (!loadingCanvasBg) {
+    if (!loadingImage) {
       setCanvasParams();
       draw();
     }
-  }, [loadingCanvasBg]);
+  }, [loadingImage]);
   
 
   useEffect(() => {
@@ -283,6 +288,7 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
           newShapeID = shapes.length + 1; 
           const newBBox = new BBox(newShapeID, newShapeInitialPoint.x, newShapeInitialPoint.y, 0.0, 0.0, activeLabelId)
           setSaving(false);
+          setShapes(prevShapes => [...prevShapes, newBBox]);
           //dispatch(setShapes([...shapes, newBBox]));
       } else {
           setCreating(false);
@@ -295,15 +301,22 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
   return (
     <div className="AnnotationCanvas" data-testid="AnnotationCanvas" ref={Drawing}>
       <div className="DrawingArea" ref={drawingArea}>
-        <canvas
-          width={window.innerWidth}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseOut={handleMouseOut}
-          onMouseOver={handleMouseOver}
-          onClick={handleOnClick}
-          ref={canvas}></canvas>
+        { (loadingImage)
+          ? 
+            <CircularProgress color="primary"/>
+          :
+            <canvas
+              width={window.innerWidth}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseOut={handleMouseOut}
+              onMouseOver={handleMouseOver}
+              onClick={handleOnClick}
+              ref={canvas}>  
+            </canvas>
+        }
+
       </div>
     </div>)
 };
