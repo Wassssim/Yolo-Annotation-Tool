@@ -6,39 +6,26 @@ import ImageWithLoader from "../../ImageWithLoader/ImageWithLoader";
 import { BBox } from '../shapes';
 import { useParams } from 'react-router-dom';
 import { setSelectedImageId } from '~/redux/slices/annotationSlice';
+import { DatasetImage } from '../interfaces';
 
 interface ImagesBandProps {
-  selectedImageId: number,
-  setLoading: any,
-  setError: any,
-  segmentId: number,
+  images: DatasetImage[],
+  onImageSelect: (imageId: DatasetImage["id"]) => void
+  selectedImageId: string,
+  hasMore: boolean,
   page: number,
   setPage: any,
 }
 
-const ImagesBand: FC<ImagesBandProps> = ({ selectedImageId, page, setPage, setLoading, setError }) => {
+const ImagesBand: FC<ImagesBandProps> = ({ images, selectedImageId, onImageSelect, hasMore, page, setPage }) => {
   const imgRef = useRef<any>(null);
-  const { segmentId }: any = useParams();
+  //const { segmentId }: any = useParams();
   /** custom hooks */
 	//const { loading, error, images, setImages, hasMore }: any= useImageScrollRedux(`${"process.env.REACT_APP_CENSUS_API_URL"}/segment/${segmentId}/images/list`, page);
-  
-  const { loading, error, images, hasMore } = useImageScroll(`${"process.env.REACT_APP_CENSUS_API_URL"}/segment/${segmentId}/images/list`, page);
+
+  //const { loading, error, images, hasMore } = useImageScroll(`${"process.env.REACT_APP_CENSUS_API_URL"}/segment/${segmentId}/images/list`, page);
   //const dispatch = useDispatch();
-
-  useEffect(() => {
-    setLoading(loading && (page === 1) && !error);
-  }, [loading])
-
-  useEffect(() => {
-    if (page === 1)
-      setError(error);
-  }, [error])
-
-  useEffect(() => {
-    if (page === 1 && images.length > 0 && !selectedImageId) {
-      //dispatch(setSelectedImageId(images[0].id));
-    }
-  }, [images, page])
+  const loading = false;
 
   useEffect(() => {
     const { scrollX, scrollY } = window;
@@ -72,15 +59,16 @@ const ImagesBand: FC<ImagesBandProps> = ({ selectedImageId, page, setPage, setLo
   }, [loading, hasMore]);
 
   /** event handling */
-  const handleImageClick = (e: any, imageID: number) => {
+  const handleImageClick = (e: any, imageId: DatasetImage["id"]) => {
+    onImageSelect(imageId);
     //dispatch(setSelectedImageId(imageID));
   }
 
   return (
   <div className={styles.ImagesBand} data-testid="ImagesBand">
     <div className="scrolling-wrapper">
-      {images.map((image: any, index: number) => {
-        const { download_url_sm } = image;
+      {images.map((image: DatasetImage, index: number) => {
+        const { url_sm } = image;
         return (
           <div 
             key={index} 
@@ -92,7 +80,7 @@ const ImagesBand: FC<ImagesBandProps> = ({ selectedImageId, page, setPage, setLo
             >
               {/*{image.id}*/}
               <ImageWithLoader
-                src={download_url_sm} 
+                src={url_sm}
                 handleClick={(e: any) => handleImageClick(e, image.id)}
               />
             </div>

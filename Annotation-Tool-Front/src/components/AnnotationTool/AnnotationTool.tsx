@@ -12,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FileUploadButton from '../Utils/FileUploadButton/FileUploadButton';
+import { DatasetImage } from './interfaces';
 
 let background: HTMLImageElement = new Image();
 
@@ -25,7 +26,7 @@ const AnnotationTool = () => {
 	const [labels, ] = useState<string[]>(["Motorbike", "Car", "Bus", "Small Truck", "Big Truck", "Construction Machine"]);
 	const [activeLabelId, setActiveLabelId] = useState<number>(0);
 	const [mode, setMode] = useState("select"); // select, create
-	//const [shapes, setShapes] = useState<any[]>([]);
+	const [shapes, setShapes] = useState<any[]>([]);
 	/* States */
 	const [page , setPage] = useState(1);
 
@@ -34,8 +35,7 @@ const AnnotationTool = () => {
 	//const selectedImageId = useSelector((state: any) => state.annotationTool.selectedImageId);
 	//const shapes = useSelector((state: any) => state.annotationTool.shapes);
 	//const images = useSelector((state: any) => state.annotationTool.images);
-	const shapes: any[] = [];
-	const [ images, setImages] = useState<any[]>([]);
+	const [ images, setImages ] = useState<DatasetImage[]>([]);
 	//const dispatch = useDispatch();
 
 	const selectedImage = useMemo(() => {
@@ -46,12 +46,24 @@ const AnnotationTool = () => {
 	const selectedImageIdx = useMemo(() => images.findIndex((image: any) => image.id === selectedImageId), [images, selectedImageId]);
 
 	const handleFileSelect = (files: File[]) => {
-		setImages(() => {
-			const newImages =  Object.values(files).map((file: File) => ({ id: file.name, name: file.name, url: URL.createObjectURL(file) }));
+		setImages( () => {
+			const newImages =  Object.values(files).map((file: File) => {
+				const url = URL.createObjectURL(file);
+				return { 
+					id: file.name,
+					datasetId: "0",
+					url,
+					url_sm: url,  
+				} as DatasetImage
+			});
 			// TODO: REMOVE THE createObjectURL MEMORY LEAK
 			setSelectedImageId(newImages[0].id);
 			return newImages;
 		});
+	}
+
+	const handleImageSelect = (imageId: DatasetImage["id"]) => {
+		setSelectedImageId(imageId);
 	}
 
 	useEffect(() => {
@@ -190,6 +202,8 @@ const AnnotationTool = () => {
 										activeLabelId={activeLabelId}
 										setSaving={setSaving}
 										background={background}
+										shapes={shapes}
+										setShapes={setShapes}
 									/>
 							}
 						</div>
@@ -199,21 +213,21 @@ const AnnotationTool = () => {
 							<ShapeController
 								key={shape.id}
 								shape={shape}
-								background={null}
+								background={background}
 								labels={labels}
 								deleteShapeById={deleteShapeById}
 							/>)
 						}
 					</div>
 				</div>
-				{/*<ImagesBand 
+				<ImagesBand 
+					images={images}
 					selectedImageId={selectedImageId}
-					setLoading={setInitialLoading}
-					setError={setInitialError}
-					segmentId={segmentId}
+					onImageSelect={handleImageSelect}
 					page={page}
+					hasMore={false}
 					setPage={setPage}
-					/>*/}
+				/>
 			</div>
 		</div>
 	)

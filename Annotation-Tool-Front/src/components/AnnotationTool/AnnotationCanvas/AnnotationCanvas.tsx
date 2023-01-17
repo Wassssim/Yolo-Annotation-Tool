@@ -11,7 +11,9 @@ interface AnnotationCanvasProps {
   mode: string,
   activeLabelId: number,
   setSaving: any,
-  background: HTMLImageElement
+  background: HTMLImageElement,
+  shapes: any[],
+  setShapes: any,
 }
 
 let ctx: any = null;
@@ -26,11 +28,10 @@ let newShapeInitialPoint: any = null;
 let colorPalette: any = ["226, 162, 79", "29, 184, 248", "239, 218, 254", "194, 61, 46", "80, 166, 121", "197, 86, 225"];
 const pointerr = new shapes.Pointer(0, 0.3, 0.09);
 
-const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, activeLabelId, background }) => {
+const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, activeLabelId, background, shapes, setShapes }) => {
   const [width, setWidth] = useState(1280);
   const [height, setHeight] = useState(720);
   const [ loadingImage, setLoadingImage ] = useState(true);
-	const [ shapes, setShapes ] = useState<any[]>([]);
 
   const [resizing, setResizing] = useState(false);
   const [resizeParams, setResizeParams] = useState<any>(null);
@@ -73,14 +74,14 @@ const AnnotationCanvas: FC<AnnotationCanvasProps> = ({ setSaving, image, mode, a
     const canvasEle = canvas?.current;
     if (!canvasEle) return;
 
-    let ratioW = Drawing.current.clientWidth/1280;
-    let ratioH = Drawing.current.clientHeight/720;
+    let ratioW = Drawing.current.clientWidth/width;
+    let ratioH = Drawing.current.clientHeight/height;
     //let ratio = Math.min(ratioW, ratioH);
 
     // dynamically assign the width and height to canvas
     //TODO: check why the width and height states are actually used
-    canvasEle.width = Math.ceil(1280*ratioW);
-    canvasEle.height = Math.ceil(720*ratioH);
+    canvasEle.width = Math.ceil(width*ratioW);
+    canvasEle.height = Math.ceil(height*ratioH);
     
     // dynamically assign the width and height to drawingArea
     const drawingAreaEle = drawingArea.current;

@@ -10,3 +10,10 @@ export interface Annotation {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface DatasetImage {
+    id: string,
+    datasetId: string;
+    url: string;
+    url_sm: string;
+}

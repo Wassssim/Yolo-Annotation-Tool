@@ -1,8 +1,23 @@
 .ShapeController {
     /*background-color: rgb(31, 34, 81);*/
-    height: 10%;
-    display: flex;
+    height: 50px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
     justify-content: space-between;
     align-content: center;
     align-items: center;
+}
+
+.ShapeImage {
+    height: 50px;
+    width: 60px;
+    justify-content: center;
+    display: flex;
+    background-color: var(--main-bg-color);
+}
+
+.ShapeController > * {
+    justify-self: center;
 }

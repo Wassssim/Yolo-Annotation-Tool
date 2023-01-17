@@ -1,9 +1,5 @@
 import React, { FC } from 'react';
 import styles from './ShapeController.module.scss';
-import {
-  Row,
-  Col,
-} from "reactstrap";
 import { useSelector, useDispatch } from 'react-redux';
 
 interface ShapeControllerProps {
@@ -19,7 +15,6 @@ const ShapeController: FC<ShapeControllerProps> = ({
   labels,
   deleteShapeById
 }) => {
-  const loadingCanvasBg = true;
   //const loadingCanvasBg = useSelector((state: any) => state.annotationTool.loadingCanvasBg);
   
   const createShapeImage = (shape: any, background: HTMLImageElement) => {
@@ -35,20 +30,19 @@ const ShapeController: FC<ShapeControllerProps> = ({
           backgroundImage: `url(${background.src})`,
           backgroundPosition: `-${posX}px -${posY}px`,
           //backgroundPosition: ` -${shape.info.x*canvas.current.width}px -${shape.info.y*canvas.current.height}px`, /* Visible coordinates in image */
-          height: `${height}px`, /* Visible height */
-          width: `${width}px`, /* Visible width */
+          height: `${Math.min(height, 50)}px`, /* Visible height */
+          width: `${Math.min(width, 50)}px`, /* Visible width */
           backgroundSize: `${background.width*ratio}px ${background.height*ratio}px`,
       }}></img>
   )}
+
   return (
-    <>
-    {!loadingCanvasBg &&
-      <div className={styles.ShapeController} data-testid="ShapeController">
-          <div>{createShapeImage(shape, background)}</div>
-          <div><p>{labels[shape.classId]}</p></div>
-          <div><button onClick={() => deleteShapeById(shape.id)}>Delete</button></div>
-      </div>}
-    </>
+    <div className={styles.ShapeController} data-testid="ShapeController">
+        {/* only display this after loading canvas bg */}
+        <div className={styles.ShapeImage}>{createShapeImage(shape, background)}</div>
+        <div><p>{labels[shape.classId]}</p></div>
+        <div><button onClick={() => deleteShapeById(shape.id)}>Delete</button></div>
+    </div>
   );
 }
 
