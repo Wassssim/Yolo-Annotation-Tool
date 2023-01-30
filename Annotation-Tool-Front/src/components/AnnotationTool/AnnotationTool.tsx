@@ -17,12 +17,7 @@ import { DatasetImage } from './interfaces';
 let background: HTMLImageElement = new Image();
 
 const AnnotationTool = () => {
-	const segmentId = 5;
-	const siteId = 1;
-  	const [initialLoading , setInitialLoading] = useState<any>(true);
-  	const [initialError , setInitialError] = useState<any>(false);
 	const [saving, setSaving] = useState(false);
-	//const [selectedImageId , setSelectedImageId] = useState<any>(null);
 	const [labels, ] = useState<string[]>(["Motorbike", "Car", "Bus", "Small Truck", "Big Truck", "Construction Machine"]);
 	const [activeLabelId, setActiveLabelId] = useState<number>(0);
 	const [mode, setMode] = useState("select"); // select, create
@@ -32,11 +27,7 @@ const AnnotationTool = () => {
 
 	/** Redux */
 	const [selectedImageId, setSelectedImageId] = useState("");
-	//const selectedImageId = useSelector((state: any) => state.annotationTool.selectedImageId);
-	//const shapes = useSelector((state: any) => state.annotationTool.shapes);
-	//const images = useSelector((state: any) => state.annotationTool.images);
 	const [ images, setImages ] = useState<DatasetImage[]>([]);
-	//const dispatch = useDispatch();
 
 	const selectedImage = useMemo(() => {
 		console.log(images, selectedImageId)
@@ -171,6 +162,7 @@ const AnnotationTool = () => {
 							id="class-select"
 							value={activeLabelId}
 							label="Class"
+							size="small"
 							onChange={(event: SelectChangeEvent<number>) => setActiveLabelId(event.target.value as number)}
 							sx={{width: 250}}
 						>

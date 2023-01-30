@@ -1,11 +1,9 @@
 import { FC, useRef, useCallback, useEffect } from 'react';
-import { useImageScroll } from "~/hooks/useImageScroll";
 import styles from './ImagesBand.module.scss';
 import './ImagesBand.css';
 import ImageWithLoader from "../../ImageWithLoader/ImageWithLoader";
 import { BBox } from '../shapes';
 import { useParams } from 'react-router-dom';
-import { setSelectedImageId } from '~/redux/slices/annotationSlice';
 import { DatasetImage } from '../interfaces';
 
 interface ImagesBandProps {
@@ -65,7 +63,7 @@ const ImagesBand: FC<ImagesBandProps> = ({ images, selectedImageId, onImageSelec
   }
 
   return (
-  <div className={styles.ImagesBand} data-testid="ImagesBand">
+  <div className="ImagesBand" data-testid="ImagesBand">
     <div className="scrolling-wrapper">
       {images.map((image: DatasetImage, index: number) => {
         const { url_sm } = image;
@@ -81,7 +79,7 @@ const ImagesBand: FC<ImagesBandProps> = ({ images, selectedImageId, onImageSelec
               {/*{image.id}*/}
               <ImageWithLoader
                 src={url_sm}
-                handleClick={(e: any) => handleImageClick(e, image.id)}
+                onClick={(e: any) => handleImageClick(e, image.id)}
               />
             </div>
           </div>
